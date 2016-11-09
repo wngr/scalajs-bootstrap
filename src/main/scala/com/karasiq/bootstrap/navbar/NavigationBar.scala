@@ -13,7 +13,7 @@ import scalatags.JsDom.all._
 /**
   * Simple bootstrap navigation bar
   */
-final class NavigationBar(barId: String, brand: Modifier, styles: Seq[NavigationBarStyle], container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier)(implicit ctx: Ctx.Owner) extends BootstrapComponent {
+final class NavigationBar(barId: String, brand: Modifier, nonTabContent: Modifier, styles: Seq[NavigationBarStyle], container: Modifier ⇒ Modifier, contentContainer: Modifier ⇒ Modifier)(implicit ctx: Ctx.Owner) extends BootstrapComponent {
   private val nav = tag("nav")
 
   val navigationTabs: Var[Seq[NavigationTab]] = Var(Nil)
@@ -100,7 +100,8 @@ final class NavigationBar(barId: String, brand: Modifier, styles: Seq[Navigation
           a(href := "#", `class` := "navbar-brand", brand)
         ),
         div(id := barId, `class` := "navbar-collapse collapse")(
-          tabContainer
+          tabContainer,
+          nonTabContent
         )
       ))
     )
@@ -116,7 +117,7 @@ final class NavigationBar(barId: String, brand: Modifier, styles: Seq[Navigation
 }
 
 object NavigationBar {
-  def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md), contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md)))(implicit ctx: Ctx.Owner) = {
-    NavigationBarBuilder(tabs, barId, brand, styles, container, contentContainer)
+  def apply(tabs: Seq[NavigationTab] = Nil, barId: String = Bootstrap.newId, brand: Modifier = "Navigation", nonTabContent: Modifier = "", styles: Seq[NavigationBarStyle] = Seq(NavigationBarStyle.default, NavigationBarStyle.fixedTop), container: Modifier ⇒ Modifier = md ⇒ GridSystem.container(md), contentContainer: Modifier ⇒ Modifier = md ⇒ GridSystem.container(GridSystem.mkRow(md)))(implicit ctx: Ctx.Owner) = {
+    NavigationBarBuilder(tabs, barId, brand, nonTabContent, styles, container, contentContainer)
   }
 }
